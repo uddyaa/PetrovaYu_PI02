@@ -1,0 +1,175 @@
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        # Проходим по массиву, сравниваем соседние элементы и меняем их местами, если они идут в неверном порядке
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+# Пример использования
+data = [64, 34, 25, 12, 22, 11, 90]
+print("Исходный массив:", data)
+bubble_sort(data)
+print("Отсортированный массив:", data)
+
+//Исходный массив: [64, 34, 25, 12, 22, 11, 90]
+//Отсортированный массив: [11, 12, 22, 25, 34, 64, 90]
+
+def insertion_sort(arr):
+    # Создаем копию массива, чтобы не изменять исходный, если нужно
+    array = arr.copy()
+    for i in range(1, len(array)):
+        key = array[i]
+        j = i - 1
+        while j >= 0 and array[j] > key:
+            array[j + 1] = array[j]
+            j -= 1
+        array[j + 1] = key
+    return array
+
+# Исходный массив
+original_array = [7, 3, 5, 2, 9]
+# Выполняем сортировку
+sorted_array = insertion_sort(original_array)
+
+# Выводим результаты
+print(f"Исходный массив: {original_array}")
+print(f"Отсортированный массив: {sorted_array}")
+
+//Исходный массив: [7, 3, 5, 2, 9]
+//Отсортированный массив: [2, 3, 5, 7, 9]
+
+def shell_sort(arr):
+    n = len(arr)
+    gap = n // 2  # начинаем с большого шага
+    
+    while gap > 0:
+        # выполняем сортировку вставками с интервалом gap
+        for i in range(gap, n):
+            temp = arr[i]
+            j = i
+            # сравниваем и сдвигаем элементы, которые разделены шагом gap
+            while j >= gap and arr[j - gap] > temp:
+                arr[j] = arr[j - gap]
+                j -= gap
+            arr[j] = temp
+        gap //= 2  # уменьшаем шаг
+    
+    return arr
+
+# пример использования
+array = [8, 5, 3, 7, 6]
+print("Изначальный массив:", array)
+sorted_array = shell_sort(array)
+print("Отсортированный массив:", sorted_array)
+
+//Изначальный массив: [8, 5, 3, 7, 6]
+//Отсортированный массив: [3, 5, 6, 7, 8]
+
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr  # базовый случай: массив из 1 элемента или пустой
+    pivot = arr[len(arr) // 2]  # выбираем опорный элемент (можно выбрать по-разному)
+    left = [x for x in arr if x < pivot]    # все элементы меньше опорного
+    middle = [x for x in arr if x == pivot] # все равные опорному
+    right = [x for x in arr if x > pivot]   # все элементы больше опорного
+    # рекурсивно сортируем части и объединяем
+    return quick_sort(left) + middle + quick_sort(right)
+
+# пример использования
+array = [8, 5, 3, 7, 6]
+print("Изначальный массив:", array)
+sorted_array = quick_sort(array)
+print("Отсортированный массив:", sorted_array)
+
+//Изначальный массив: [8, 5, 3, 7, 6]
+//Отсортированный массив: [3, 5, 6, 7, 8]
+
+def linear_search(arr, target):
+    # Проходим по всем элементам массива
+    for i, num in enumerate(arr):
+        # Если нашли искомый элемент
+        if num == target:
+            return i  # Возвращаем индекс найденного элемента
+    return -1  # Если не нашли, возвращаем -1
+
+# Создаем список
+array = [3, 5, 2, 7, 9, 1, 4]
+
+target = 7  # Искомое значение
+
+# Вызываем функцию поиска
+result = linear_search(array, target)
+
+# Выводим результат
+if result != -1:
+    print(f"Элемент найден на позиции: {result}")
+else:
+    print("Элемент не найден")
+
+//Элемент найден на позиции: 3
+
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid  # найденный индекс
+        elif arr[mid] < target:
+            left = mid + 1  # ищем в правой половине
+        else:
+            right = mid - 1  # ищем в левой половине
+    return -1  # если не нашли
+
+# пример использования
+sorted_array = [1, 3, 5, 7, 9, 11]
+target_value = 7
+
+result = binary_search(sorted_array, target_value)
+if result != -1:
+    print(f"Элемент найден в позиции {result}")
+else:
+    print("Элемент не найден")
+
+//Элемент найден в позиции 3
+
+def fibonacci_search(arr, target):
+    n = len(arr)
+
+    # Создаем последовательность Фибоначчи, которая больше или равна n
+    fib2, fib1 = 0, 1
+    while fib1 < n:
+        fib2, fib1 = fib1, fib2 + fib1
+
+    offset = -1
+
+    # Пока есть еще элементы для поиска
+    while fib1 > 1:
+        # Уменьшаем индекс для сравнения
+        i = min(offset + fib2, n - 1)
+
+        if arr[i] < target:
+            fib1, fib2 = fib1 - fib2, fib2 - (fib1 - fib2)
+            offset = i
+        elif arr[i] > target:
+            fib1, fib2 = fib2, fib1 - fib2
+        else:
+            return i  # нашли элемент
+
+    # Проверяем последний элемент, если он совпадает
+    if fib2 and offset + 1 < n and arr[offset + 1] == target:
+        return offset + 1
+
+    return -1  # не найден
+
+# пример использования
+array = [1, 3, 5, 7, 9, 11]
+target_value = 7
+
+result = fibonacci_search(array, target_value)
+if result != -1:
+    print(f"Элемент найден в позиции {result}")
+else:
+    print("Элемент не найден")
+
+//Элемент найден в позиции 3
