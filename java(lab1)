@@ -1,0 +1,10 @@
+#список на Java
+string[] numbers = new string[] {"1", "2", "3", "4", "5"};
+
+#стек на Java 
+MyStack stack = new MyStack();
+stack.push("1");
+stack.push("2");
+stack.push("3");
+stack.push("4");
+stack.push("5");
