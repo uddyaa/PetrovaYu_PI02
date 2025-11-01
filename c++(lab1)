@@ -1,0 +1,20 @@
+#список на C++
+#include <iostream>
+#include <string>
+
+int main() {
+	std::string lst[] = {"1", "2", "3", "4", "5"};
+	int size = 5;
+
+	for(int i = 0; i < size; i++) {
+		std::cout << lst[i] << std::endl;
+	}
+	return 0;
+}
+
+#стек на C++
+stack.push("1");
+stack.push("2");
+stack.push("3");
+stack.push("4");
+stack.push("5");
