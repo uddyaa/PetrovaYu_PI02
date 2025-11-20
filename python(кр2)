@@ -1,0 +1,93 @@
+import random
+import math
+
+def distance_to_centers(point, centers):
+    """Вычисляет сумму расстояний от точки до всех центров."""
+    total = 0
+    for center in centers:
+        dx = point[0] - center[0]
+        dy = point[1] - center[1]
+        total += math.sqrt(dx*dx + dy*dy)
+    return total
+
+def sa_placement(centers, n_points, temp, cooling):
+    points = [[random.uniform(-10, 10), random.uniform(-10, 10)] for _ in range(n_points)]
+    current_energy = sum(distance_to_centers(p, centers) for p in points)
+    
+    while temp > 1e-6:
+        # Случайно сдвинуть одну точку
+        new_points = [p[:] for p in points]
+        idx = random.randint(0, n_points - 1)
+        new_points[idx][0] += random.uniform(-1, 1) * temp
+        new_points[idx][1] += random.uniform(-1, 1) * temp
+        
+        new_energy = sum(distance_to_centers(p, centers) for p in new_points)
+        
+        # Принять/отклонить новый набор по критерию Метрополиса
+        delta_energy = new_energy - current_energy
+        if delta_energy < 0:  # Если энергия уменьшилась — принимаем
+            points = new_points
+            current_energy = new_energy
+        else:  # Иначе принимаем с вероятностью exp(-delta_energy / temp)
+            probability = math.exp(-delta_energy / temp)
+            if random.random() < probability:
+                points = new_points
+                current_energy = new_energy
+        
+        temp *= cooling
+    
+    return points
+
+# Ручной ввод параметров
+print("Введите координаты центров (x y), по одному центру на строку.")
+print("Для завершения ввода введите пустую строку.")
+centers = []
+while True:
+    line = input().strip()
+    if not line:
+        break
+    x, y = map(float, line.split())
+    centers.append([x, y])
+
+n_points = int(input("Введите количество размещаемых точек: "))
+initial_temp = float(input("Введите начальную температуру: "))
+cooling_rate = float(input("Введите коэффициент охлаждения (<1): "))
+
+# Запуск алгоритма
+result_points = sa_placement(centers, n_points, initial_temp, cooling_rate)
+
+# Вывод результата
+print("\nРазмещённые точки:")
+for i, point in enumerate(result_points):
+    print(f"Точка {i+1}: x = {point[0]:.4f}, y = {point[1]:.4f}")
+
+print(f"\nСуммарное расстояние до центров: {sum(distance_to_centers(p, centers) for p in result_points):.4f}")
+
+//Ввод
+//2 6
+//20
+//100
+//0.995
+//Вывод
+//Размещённые точки:
+//Точка 1: x = 22.7228, y = 2.3985
+//Точка 2: x = 10.7225, y = 10.4770
+//Точка 3: x = -40.6282, y = 19.1700
+//Точка 4: x = 87.5354, y = -81.7038
+//Точка 5: x = -66.0222, y = 71.5527
+//Точка 6: x = -36.1713, y = 45.3375
+//Точка 7: x = 143.0098, y = -76.1416
+//Точка 8: x = -7.6164, y = 4.7430
+//Точка 9: x = 21.8675, y = -0.0969
+//Точка 10: x = -4.3326, y = 24.9324
+//Точка 11: x = -11.8423, y = 101.6507
+//Точка 12: x = -8.9398, y = -53.8590
+//Точка 13: x = 58.2085, y = -44.2381
+//Точка 14: x = 33.3736, y = -49.9318
+//Точка 15: x = -123.5857, y = 21.5692
+//Точка 16: x = 4.0715, y = 59.4073
+//Точка 17: x = -3.0332, y = 5.4640
+//Точка 18: x = -77.8293, y = 73.8004
+//Точка 19: x = -6.4337, y = -20.2556
+//Точка 20: x = 32.1248, y = -20.1623
+//Суммарное расстояние до центров: 1215,1605
